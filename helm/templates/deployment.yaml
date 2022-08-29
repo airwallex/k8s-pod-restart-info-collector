@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-pod-restart-info-collector.fullname" . }}
+  labels:
+    {{- include "k8s-pod-restart-info-collector.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "k8s-pod-restart-info-collector.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+    {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "k8s-pod-restart-info-collector.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "k8s-pod-restart-info-collector.fullname" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: collector
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/k8s-pod-restart-info-collector"]
+          env:
+            - name: CLUSTER_NAME
+              value: {{ required "service name is required" .Values.clusterName | quote}}
+            - name: SLACK_CHANNEL
+              value: {{ .Values.slackChannel | quote}}
+            - name: SLACK_USERNAME
+              value: {{ .Values.slackUsername | quote}}
+            - name: MUTE_SECONDS
+              value: {{ .Values.muteSeconds | quote}}
+            - name: SLACK_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  key: slackWebhookUrl
+                  name: {{ include "k8s-pod-restart-info-collector.fullname" . }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

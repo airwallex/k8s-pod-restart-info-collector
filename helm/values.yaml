@@ -1,0 +1,36 @@
+# Default values for k8s-pod-restart-info-collector.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# clusterName: "gtpn-prod-sg"
+# slackWebhookUrl: "https://hooks.slack.com/services/xxxxxx"
+slackChannel: "restart-info-nonprod"
+slackUsername: "k8s-pod-restart-info-collector"
+muteSeconds: 600
+
+image:
+  repository: devopsairwallex/k8s-pod-restart-info-collector
+  # tag: "latest"
+  tag: "v1.0.0"
+
+resources: 
+  limits:
+    cpu: 50m
+    memory: 100Mi
+  requests:
+    cpu: 20m
+    memory: 50Mi
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

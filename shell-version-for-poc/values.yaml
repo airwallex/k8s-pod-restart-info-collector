@@ -1,0 +1,40 @@
+# Default values for pod-restart-info-collector.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# clusterName: "Change-Me"
+# slackWebhookUrl: "https://hooks.slack.com/services/Change-Me"
+slackChannel: "restart-info-nonprod"
+slackUsername: "pod-restart-info-collector"
+intervalSeconds: 60
+muteLoopCount: 10
+
+image:
+  repository: alpine/k8s
+  tag: "1.20.4"
+  pullPolicy: IfNotPresent
+
+resources: 
+  limits:
+    cpu: 300m
+    memory: 300Mi
+  requests:
+    cpu: 100m
+    memory: 50Mi
+
+
+
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
