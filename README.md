@@ -34,7 +34,7 @@ go run .
 ```bash
 helm upgrade --install k8s-pod-restart-info-collector ./helm \
    --set slackWebhookUrl="https://hooks.slack.com/services/Change-Me" \
-   --set clusterName="Change-Me" 
+   --set clusterName="Change-Me" \
    --set slackChannel="Change-Me"
 ```
 
