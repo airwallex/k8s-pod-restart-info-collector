@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -13,6 +14,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/duration"
+	"k8s.io/klog/v2"
 	"k8s.io/kubectl/pkg/describe"
 )
 
@@ -23,6 +25,36 @@ func getPodRestartCount(pod *v1.Pod) int {
 		restarts += int(container.RestartCount)
 	}
 	return restarts
+}
+
+func isIgnoredNamespace(namespace string) bool {
+	ignoredNamespacesEnv := os.Getenv("IGNORED_NAMESPACES")
+	if ignoredNamespacesEnv == "" {
+		return false
+	}
+	ignoredNamespaces := strings.Split(ignoredNamespacesEnv, ",")
+	for _, ignoredNamespace := range ignoredNamespaces {
+		if ignoredNamespace == namespace {
+			klog.Infof("Ignore: namespace %s is in the ignored namespace list\n", namespace)
+			return true
+		}
+	}
+	return false
+}
+
+func isIgnoredPod(name string) bool {
+	ignoredPodNamePrefixesEnv := os.Getenv("IGNORED_POD_NAME_PREFIXES")
+	if ignoredPodNamePrefixesEnv == "" {
+		return false
+	}
+	ignoredPodNamePrefixes := strings.Split(ignoredPodNamePrefixesEnv, ",")
+	for _, ignoredPodNamePrefix := range ignoredPodNamePrefixes {
+		if strings.HasPrefix(name, ignoredPodNamePrefix) {
+			klog.Infof("Ignore: pod %s has ignored name prefix: %s\n", name, ignoredPodNamePrefix)
+			return true
+		}
+	}
+	return false
 }
 
 func printPod(pod *v1.Pod) (string, error) {

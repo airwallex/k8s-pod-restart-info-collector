@@ -8,10 +8,14 @@ slackChannel: "restart-info-nonprod"
 slackUsername: "k8s-pod-restart-info-collector"
 muteSeconds: 600
 
+# A comma-separated list of namespaces to ignore
+ignoredNamespaces: ""
+# A comma-separated list of pod name prefixes to ignore
+ignoredPodNamePrefixes: ""
+
 image:
   repository: devopsairwallex/k8s-pod-restart-info-collector
-  # tag: "latest"
-  tag: "v1.0.0"
+  tag: "v1.1.0"
 
 resources: 
   limits:

@@ -77,7 +77,8 @@ helm uninstall k8s-pod-restart-info-collector
 | `slackUsername`       | Slack username (Display on slack message) | default: `"k8s-pod-restart-info-collector"`          |
 | `slackChannel`        | Slack channel name | default: `"restart-info-nonprod"`          |
 | `muteSeconds`         | The time to mute duplicate pod alerts | default: `"600"`    
-
+| `ignoredNamespaces`         | A comma-separated list of namespaces to ignore | default: `""`    
+| `ignoredPodNamePrefixes`    | A comma-separated list of pod name prefixes to ignore | default: `""`    
 
 ## FAQ
 

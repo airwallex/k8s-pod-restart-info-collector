@@ -53,6 +53,14 @@ func NewController(clientset kubernetes.Interface, slack Slack) *Controller {
 				return
 			}
 
+			if isIgnoredNamespace(newPod.Namespace) {
+				return
+			}
+
+			if isIgnoredPod(newPod.Name) {
+				return
+			}
+
 			klog.Infof("Update: %s/%s\n", newPod.Namespace, newPod.Name)
 
 			newPodRestartCount := getPodRestartCount(newPod)
