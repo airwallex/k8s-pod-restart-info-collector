@@ -70,15 +70,17 @@ helm uninstall k8s-pod-restart-info-collector
 
 ## Helm Parameters
 
-| Name                       | Description                                        | Value         |
-| -------------------------- | -------------------------------------------------- | ------------- |
-| `clusterName`         | K8s cluster name (Display on slack message)                        | required         |
-| `slackWebhookUrl`     | Slack webhook URL | required          |
-| `slackUsername`       | Slack username (Display on slack message) | default: `"k8s-pod-restart-info-collector"`          |
-| `slackChannel`        | Slack channel name | default: `"restart-info-nonprod"`          |
-| `muteSeconds`         | The time to mute duplicate pod alerts | default: `"600"`    
-| `ignoredNamespaces`         | A comma-separated list of namespaces to ignore | default: `""`    
-| `ignoredPodNamePrefixes`    | A comma-separated list of pod name prefixes to ignore | default: `""`    
+| Name                                | Description                                        | Value         |
+| ------------------------------------| -------------------------------------------------- | ------------- |
+| `clusterName`                       | K8s cluster name (Display on slack message)                        | required         |
+| `slackWebhookUrl`                   | Slack webhook URL | required if slackWebhooUrlSecretKeyRef is not present                       |
+| `slackWebhookurlSecretKeyRef.key`   | Slack webhook URL SecretKeyRef.key                 | |
+| `slackWebhookurlSecretKeyRef.name`  | Slack webhook URL SecretKeyRef.name                | |
+| `slackUsername`                     | Slack username (Display on slack message) | default: `"k8s-pod-restart-info-collector"`          |
+| `slackChannel`                      | Slack channel name | default: `"restart-info-nonprod"`          |
+| `muteSeconds`                       | The time to mute duplicate pod alerts | default: `"600"`    
+| `ignoredNamespaces`                 | A comma-separated list of namespaces to ignore | default: `""`    
+| `ignoredPodNamePrefixes`            | A comma-separated list of pod name prefixes to ignore | default: `""`    
 
 ## FAQ
 

@@ -61,3 +61,19 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Use existing secret or create one based on slackWebhookUrl
+*/}}
+{{- define "k8s-pod-restart-info-collector.SlackWebhookUrlSecret" -}}
+{{- if not .Values.slackWebhookUrlSecretKeyRef }}
+  secretKeyRef:
+    key: slackWebhookUrl
+    name: {{ include "k8s-pod-restart-info-collector.fullname" . }}
+{{- else }}
+  secretKeyRef:
+    key: {{ .Values.slackWebhookUrlSecretKeyRef.key }} 
+    name: {{ .Values.slackWebhookUrlSecretKeyRef.name }}
+    optional: false
+{{- end }}
+{{- end }}

@@ -45,9 +45,7 @@ spec:
               value: {{ .Values.ignoredPodNamePrefixes | quote}}
             - name: SLACK_WEBHOOK_URL
               valueFrom:
-                secretKeyRef:
-                  key: slackWebhookUrl
-                  name: {{ include "k8s-pod-restart-info-collector.fullname" . }}
+              {{- include "k8s-pod-restart-info-collector.SlackWebhookUrlSecret" . | indent 14 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

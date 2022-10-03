@@ -4,6 +4,9 @@
 
 # clusterName: "gtpn-prod-sg"
 # slackWebhookUrl: "https://hooks.slack.com/services/xxxxxx"
+#slackWebhookUrlSecretKeyRef:
+#  key: "slackWebhookUrl"
+#  name: "k8s-pod-restart-info-collector"
 slackChannel: "restart-info-nonprod"
 slackUsername: "k8s-pod-restart-info-collector"
 muteSeconds: 600
