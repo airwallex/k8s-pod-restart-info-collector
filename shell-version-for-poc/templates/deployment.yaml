@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-pod-restart-info-collector.fullname" . }}
+  labels:
+    {{- include "k8s-pod-restart-info-collector.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "k8s-pod-restart-info-collector.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "k8s-pod-restart-info-collector.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "k8s-pod-restart-info-collector.fullname" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: collector
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/bin/bash" ]
+          args: [ "/scripts/collector.sh" ]
+          env:
+            - name: CLUSTER_NAME
+              value: {{ required "service name is required" .Values.clusterName | quote}}
+            - name: SLACK_CHANNEL
+              value: {{ .Values.slackChannel | quote}}
+            - name: SLACK_USERNAME
+              value: {{ .Values.slackUsername | quote}}
+            - name: INTERVAL_SECONDS
+              value: {{ .Values.intervalSeconds | quote}}
+            - name: MUTE_LOOP_COUNT
+              value: {{ .Values.muteLoopCount | quote}}
+            - name: SLACK_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  key: slackWebhookUrl
+                  name: {{ include "k8s-pod-restart-info-collector.fullname" . }}
+          volumeMounts:
+            - mountPath: /scripts
+              name: collector-script
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      - name: collector-script
+        configMap:
+          name: {{ include "k8s-pod-restart-info-collector.fullname" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
