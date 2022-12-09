@@ -54,10 +54,12 @@ func NewController(clientset kubernetes.Interface, slack Slack) *Controller {
 			}
 
 			if isIgnoredNamespace(newPod.Namespace) {
+				klog.Infof("Ignore: %s/%s pod located in ignoredNamespaces", newPod.Namespace, newPod.Name)
 				return
 			}
 
 			if isIgnoredPod(newPod.Name) {
+				klog.Infof("Ignore: %s/%s pod name matched to ignoredPodNamePrefixes", newPod.Namespace, newPod.Name)
 				return
 			}
 
