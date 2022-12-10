@@ -11,6 +11,7 @@
 slackChannel: "restart-info-nonprod"
 slackUsername: "k8s-pod-restart-info-collector"
 muteSeconds: 600
+ignoreRestartCount: 30
 
 # A comma-separated list of namespaces to ignore
 ignoredNamespaces: ""
