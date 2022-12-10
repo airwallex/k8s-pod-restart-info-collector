@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"os"
 	"sort"
+	"strconv"
 	"time"
 
 	v1 "k8s.io/api/core/v1"
@@ -63,10 +65,15 @@ func NewController(clientset kubernetes.Interface, slack Slack) *Controller {
 
 			klog.Infof("Update: %s/%s\n", newPod.Namespace, newPod.Name)
 
+			ignoreRestartCount, err := strconv.Atoi(os.Getenv("IGNORE_RESTART_COUNT"))
+			if err != nil {
+				ignoreRestartCount = 30
+				klog.Warningf("Environment variable IGNORE_RESTART_COUNT is not set, default: %d\n", ignoreRestartCount)
+			}
+
 			newPodRestartCount := getPodRestartCount(newPod)
-			// Ignore when restartCount > 30
-			if newPodRestartCount > 30 {
-				klog.Infof("Ignore: %s/%s restartCount: %d > 30\n", newPod.Namespace, newPod.Name, newPodRestartCount)
+			if newPodRestartCount > ignoreRestartCount {
+				klog.Infof("Ignore: %s/%s restartCount: %d > %d \n", newPod.Namespace, newPod.Name, newPodRestartCount, ignoreRestartCount)
 				return
 			}
 
