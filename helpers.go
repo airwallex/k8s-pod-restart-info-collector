@@ -57,6 +57,36 @@ func isIgnoredPod(name string) bool {
 	return false
 }
 
+func isWatchedNamespaced(namespace string) bool{
+	watchedNamespacesEnv := os.Getenv("WATCHED_NAMESPACES")
+	if watchedNamespacesEnv == "" {
+		return false
+	}
+	watchedNamespaces := strings.Split(watchedNamespacesEnv, ",")
+	for _, watchedNamespace := range watchedNamespaces {
+		if watchedNamespace == namespace {
+			return false
+		}
+	}
+	klog.Infof("Ignore: namespace %s is not on the watched namespace list\n", namespace)
+	return true
+}
+
+func isWatchedPod(name string) bool{
+	watchedPodNamePrefixesEnv := os.Getenv("WATCHED_POD_NAME_PREFIXES")
+	if watchedPodNamePrefixesEnv == "" {
+		return false
+	}
+	watchedPodNamePrefixes := strings.Split(watchedPodNamePrefixesEnv, ",")
+	for _, watchedPodNamePrefix := range watchedPodNamePrefixes {
+		if strings.HasPrefix(name, watchedPodNamePrefix) {
+			return false
+		}
+	}
+	klog.Infof("Ignore: pod %s doesn't have watched prefix\n", name)
+	return true
+}
+
 func printPod(pod *v1.Pod) (string, error) {
 	restarts := 0
 	totalContainers := len(pod.Spec.Containers)

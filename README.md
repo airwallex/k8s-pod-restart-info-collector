@@ -78,6 +78,8 @@ helm uninstall k8s-pod-restart-info-collector
 | `muteSeconds`                       | The time to mute duplicate pod alerts | default: `"600"`    
 | `ignoredNamespaces`                 | A comma-separated list of namespaces to ignore | default: `""`    
 | `ignoredPodNamePrefixes`            | A comma-separated list of pod name prefixes to ignore | default: `""`   
+| `watchedNamespaces`                 | A comma-separated list of namespaces to watch | default: `""`    
+| `watchedPodNamePrefixes`            | A comma-separated list of pod name prefixes to watch | default: `""`   
 | `slackWebhookUrl`                   | Slack webhook URL | required if slackWebhooUrlSecretKeyRef is not present                       |
 | `slackWebhookurlSecretKeyRef.key`   | Slack webhook URL SecretKeyRef.key                 | |
 | `slackWebhookurlSecretKeyRef.name`  | Slack webhook URL SecretKeyRef.name                | |
