@@ -43,6 +43,10 @@ spec:
               value: {{ .Values.ignoredNamespaces | quote}}
             - name: IGNORED_POD_NAME_PREFIXES
               value: {{ .Values.ignoredPodNamePrefixes | quote}}
+            - name: WATCHED_NAMESPACES
+              value: {{ .Values.watchedNamespaces | quote}}
+            - name: WATCHED_POD_NAME_PREFIXES
+              value: {{ .Values.watchedPodNamePrefixes | quote}}
             - name: SLACK_WEBHOOK_URL
               valueFrom:
               {{- include "k8s-pod-restart-info-collector.SlackWebhookUrlSecret" . | indent 14 }}

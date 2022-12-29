@@ -2,7 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-
 # clusterName: "Change-Me"
 # slackWebhookUrl: "https://hooks.slack.com/services/Change-Me"
 #slackWebhookUrlSecretKeyRef:
@@ -17,11 +16,16 @@ ignoredNamespaces: ""
 # A comma-separated list of pod name prefixes to ignore
 ignoredPodNamePrefixes: ""
 
+# A comma-separated list of namespaces to watch
+watchedNamespaces: ""
+# A comma-separated list of pod name prefixes to watch
+watchedPodNamePrefixes: ""
+
 image:
   repository: devopsairwallex/k8s-pod-restart-info-collector
   tag: "v1.1.0"
 
-resources: 
+resources:
   limits:
     cpu: 50m
     memory: 100Mi
