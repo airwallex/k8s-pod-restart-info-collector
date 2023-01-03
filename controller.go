@@ -37,6 +37,7 @@ type Controller struct {
 // NewController creates a new Controller.
 func NewController(clientset kubernetes.Interface, slack Slack) *Controller {
 	const resyncPeriod = 0
+	ignoreRestartCount := getIgnoreRestartCount()
 
 	queue := workqueue.NewRateLimitingQueue(workqueue.DefaultControllerRateLimiter())
 	informerFactory := informers.NewSharedInformerFactory(clientset, resyncPeriod)
@@ -61,12 +62,10 @@ func NewController(clientset kubernetes.Interface, slack Slack) *Controller {
 				return
 			}
 
-			klog.Infof("Update: %s/%s\n", newPod.Namespace, newPod.Name)
-
 			newPodRestartCount := getPodRestartCount(newPod)
-			// Ignore when restartCount > 30
-			if newPodRestartCount > 30 {
-				klog.Infof("Ignore: %s/%s restartCount: %d > 30\n", newPod.Namespace, newPod.Name, newPodRestartCount)
+			// Ignore when restartCount > ignoreRestartCount
+			if newPodRestartCount > ignoreRestartCount {
+				klog.Infof("Ignore: %s/%s restartCount: %d > %d\n", newPod.Namespace, newPod.Name, newPodRestartCount, ignoreRestartCount)
 				return
 			}
 

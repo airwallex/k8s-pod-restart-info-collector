@@ -39,6 +39,8 @@ spec:
               value: {{ .Values.slackUsername | quote}}
             - name: MUTE_SECONDS
               value: {{ .Values.muteSeconds | quote}}
+            - name: IGNORE_RESTART_COUNT
+              value: {{ .Values.ignoreRestartCount | quote}}
             - name: IGNORED_NAMESPACES
               value: {{ .Values.ignoredNamespaces | quote}}
             - name: IGNORED_POD_NAME_PREFIXES

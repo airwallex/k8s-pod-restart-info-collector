@@ -57,6 +57,15 @@ func isIgnoredPod(name string) bool {
 	return false
 }
 
+func getIgnoreRestartCount() int {
+	ignoreRestartCount, err := strconv.Atoi(os.Getenv("IGNORE_RESTART_COUNT"))
+	if err != nil {
+		ignoreRestartCount = 30
+		klog.Warningf("Environment variable IGNORE_RESTART_COUNT is not set, default: %d\n", ignoreRestartCount)
+	}
+	return ignoreRestartCount
+}
+
 func printPod(pod *v1.Pod) (string, error) {
 	restarts := 0
 	totalContainers := len(pod.Spec.Containers)
