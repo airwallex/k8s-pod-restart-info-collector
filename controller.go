@@ -230,7 +230,14 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 
 		restartReason := printContainerLastStateReason(status)
 
+		//mapping container status and container specs to send resource limit of exact container
 		containerSpec := pod.Spec.Containers[i]
+		for j, container := range pod.Spec.Containers {
+		    if status.Name == container.Name {
+		        containerSpec = pod.Spec.Containers[j]
+		        break
+		    }
+		}
 		containerResource, err := getContainerResource(containerSpec)
 		if err != nil {
 			return err
