@@ -75,9 +75,9 @@ func (s Slack) sendToChannel(msg SlackMessage, slackChannel string) error {
 
 	attachment := slack.Attachment{
 		Text:       msg.Text,
-		Title:      msg.Title,
+		Pretext:    msg.Title,
 		Footer:     msg.Footer,
-		MarkdownIn: []string{"text"},
+		MarkdownIn: []string{"text", "pretext"},
 		Color:      "#4599DF",
 		Ts:         json.Number(strconv.FormatInt(time.Now().Unix(), 10)),
 	}
