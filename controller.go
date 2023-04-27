@@ -213,7 +213,7 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 	}
 
 	// check and collect restarted container info
-	for i, status := range pod.Status.ContainerStatuses {
+	for _, status := range pod.Status.ContainerStatuses {
 		if status.RestartCount == 0 {
 			continue
 		}
@@ -232,7 +232,13 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 
 		restartReason := printContainerLastStateReason(status)
 
-		containerSpec := pod.Spec.Containers[i]
+		var containerSpec v1.Container
+		for _, container := range pod.Spec.Containers {
+			if status.Name == container.Name {
+				containerSpec = container
+				break
+			}
+		}
 		containerResource, err := getContainerResource(containerSpec)
 		if err != nil {
 			return err
