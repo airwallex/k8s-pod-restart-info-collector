@@ -217,6 +217,9 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 		if status.RestartCount == 0 {
 			continue
 		}
+		if status.LastTerminationState.Terminated.ExitCode == 0 {
+			continue
+		}
 
 		klog.Infof("Handle: %s restarted! , restartCount: %d\n\n", podKey, status.RestartCount)
 
