@@ -79,6 +79,7 @@ helm uninstall k8s-pod-restart-info-collector
 | `ignoreRestartCount`                | The number of pod restart count to ignore | default: `"30"`
 | `ignoredNamespaces`                 | A comma-separated list of namespaces to ignore | default: `""`    
 | `ignoredPodNamePrefixes`            | A comma-separated list of pod name prefixes to ignore | default: `""`   
+| `ignoreRestartsWithExitCodeZero`    | Whether restart events with an exit code of 0 should be ignored | default: `false`
 | `slackWebhookUrl`                   | Slack webhook URL | required if slackWebhooUrlSecretKeyRef is not present                       |
 | `slackWebhookurlSecretKeyRef.key`   | Slack webhook URL SecretKeyRef.key                 | |
 | `slackWebhookurlSecretKeyRef.name`  | Slack webhook URL SecretKeyRef.name                | |
