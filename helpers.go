@@ -57,6 +57,17 @@ func isIgnoredPod(name string) bool {
 	return false
 }
 
+func shouldIgnoreRestartsWithExitCodeZero(status v1.ContainerStatus) bool {
+	if os.Getenv("IGNORE_RESTARTS_WITH_EXIT_CODE_ZERO") != "true" {
+		return false
+	}
+
+	if status.LastTerminationState.Terminated != nil && status.LastTerminationState.Terminated.ExitCode == 0 {
+		return true
+	}
+	return false
+}
+
 func getIgnoreRestartCount() int {
 	ignoreRestartCount, err := strconv.Atoi(os.Getenv("IGNORE_RESTART_COUNT"))
 	if err != nil {

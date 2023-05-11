@@ -18,9 +18,12 @@ ignoredNamespaces: ""
 # A comma-separated list of pod name prefixes to ignore
 ignoredPodNamePrefixes: ""
 
+# Whether restart events with an exit code of 0 should be ignored, true or false
+ignoreRestartsWithExitCodeZero: false
+
 image:
   repository: devopsairwallex/k8s-pod-restart-info-collector
-  tag: "v1.1.0"
+  tag: "v1.3.0"
 
 resources: 
   limits:

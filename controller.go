@@ -218,7 +218,12 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 			continue
 		}
 
-		klog.Infof("Handle: %s restarted! , restartCount: %d\n\n", podKey, status.RestartCount)
+		if shouldIgnoreRestartsWithExitCodeZero(status) {
+			klog.Infof("Ignore: %s restarted with ExitCode 0, restartCount: %d\n", podKey, status.RestartCount)
+			continue
+		}
+
+		klog.Infof("Handle: %s restarted, restartCount: %d\n", podKey, status.RestartCount)
 
 		podInfo, err := printPod(pod)
 		if err != nil {
