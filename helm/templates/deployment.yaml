@@ -43,6 +43,10 @@ spec:
               value: {{ .Values.ignoreRestartCount | quote}}
             - name: IGNORED_NAMESPACES
               value: {{ .Values.ignoredNamespaces | quote}}
+            - name: WATCHED_NAMESPACES
+              value: {{ .Values.watchedNamespaces | quote}}
+            - name: WATCHED_POD_NAME_PREFIXES
+              value: {{ .Values.watchedPodNamePrefixes | quote}}
             - name: IGNORED_POD_NAME_PREFIXES
               value: {{ .Values.ignoredPodNamePrefixes | quote}}
             - name: IGNORE_RESTARTS_WITH_EXIT_CODE_ZERO

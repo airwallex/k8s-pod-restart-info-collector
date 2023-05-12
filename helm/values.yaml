@@ -18,12 +18,17 @@ ignoredNamespaces: ""
 # A comma-separated list of pod name prefixes to ignore
 ignoredPodNamePrefixes: ""
 
+# A comma-separated list of namespaces to watch, default is all ("")
+watchedNamespaces: ""
+# A comma-separated list of pod name prefixes to watch, default is all ("").
+watchedPodNamePrefixes: ""
+
 # Whether restart events with an exit code of 0 should be ignored, true or false
 ignoreRestartsWithExitCodeZero: false
 
 image:
   repository: devopsairwallex/k8s-pod-restart-info-collector
-  tag: "v1.3.0"
+  tag: "v1.4.0"
 
 resources: 
   limits:

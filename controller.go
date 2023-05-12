@@ -54,11 +54,11 @@ func NewController(clientset kubernetes.Interface, slack Slack) *Controller {
 				return
 			}
 
-			if isIgnoredNamespace(newPod.Namespace) {
+			if !isWatchedNamespace(newPod.Namespace) || isIgnoredNamespace(newPod.Namespace) {
 				return
 			}
 
-			if isIgnoredPod(newPod.Name) {
+			if !isWatchedPod(newPod.Name) || isIgnoredPod(newPod.Name) {
 				return
 			}
 

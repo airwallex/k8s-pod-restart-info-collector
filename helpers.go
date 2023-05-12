@@ -57,6 +57,38 @@ func isIgnoredPod(name string) bool {
 	return false
 }
 
+func isWatchedNamespace(namespace string) bool {
+	watchedNamespacesEnv := os.Getenv("WATCHED_NAMESPACES")
+	if watchedNamespacesEnv == "" {
+		return true
+	}
+	watchedNamespaces := strings.Split(watchedNamespacesEnv, ",")
+	for _, watchedNamespace := range watchedNamespaces {
+		if watchedNamespace == namespace {
+			return true
+		}
+	}
+
+	// Turn off logging as there are too many logs.
+	// klog.Infof("Ignore: namespace %s is not on the watched namespace list\n", namespace)
+	return false
+}
+
+func isWatchedPod(name string) bool {
+	watchedPodNamePrefixesEnv := os.Getenv("WATCHED_POD_NAME_PREFIXES")
+	if watchedPodNamePrefixesEnv == "" {
+		return true
+	}
+	watchedPodNamePrefixes := strings.Split(watchedPodNamePrefixesEnv, ",")
+	for _, watchedPodNamePrefix := range watchedPodNamePrefixes {
+		if strings.HasPrefix(name, watchedPodNamePrefix) {
+			return true
+		}
+	}
+	// klog.Infof("Ignore: pod %s doesn't have the watched pod name prefixes\n", name)
+	return false
+}
+
 func shouldIgnoreRestartsWithExitCodeZero(status v1.ContainerStatus) bool {
 	if os.Getenv("IGNORE_RESTARTS_WITH_EXIT_CODE_ZERO") != "true" {
 		return false
