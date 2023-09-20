@@ -77,10 +77,10 @@ helm uninstall k8s-pod-restart-info-collector
 | `slackChannel`                      | Slack channel name | default: `"restart-info-nonprod"`          |
 | `muteSeconds`                       | The time to mute duplicate pod alerts | default: `"600"`    
 | `ignoreRestartCount`                | The number of pod restart count to ignore | default: `"30"`
-| `ignoredNamespaces`                 | A comma-separated list of namespaces to ignore | default: `""`    
-| `ignoredPodNamePrefixes`            | A comma-separated list of pod name prefixes to ignore | default: `""`   
-| `watchedNamespaces`                 | A comma-separated list of namespaces to watch, default is all ("")| default: `""`    
-| `watchedPodNamePrefixes`            | A comma-separated list of pod name prefixes to watch, default is all ("")| default: `""`   
+| `ignoredNamespaces`                 | A set of namespaces to be ignored. This should be provided as a comma-separated list or a regular expression. | default: `""`    
+| `ignoredPodNamePrefixes`            | A set of pod name prefixes to be ignored. This should be provided as a comma-separated list or a regular expression. | default: `""`   
+| `watchedNamespaces`                 | A set of namespaces to be watched. This should be provided as a comma-separated list or a regular expression. | default: `""`    
+| `watchedPodNamePrefixes`            | A set of pod name prefixes to be watched. This should be provided as a comma-separated list or a regular expression. | default: `""`   
 | `ignoreRestartsWithExitCodeZero`    | Whether restart events with an exit code of 0 should be ignored | default: `false`
 | `slackWebhookUrl`                   | Slack webhook URL | required if slackWebhooUrlSecretKeyRef is not present                       |
 | `slackWebhookurlSecretKeyRef.key`   | Slack webhook URL SecretKeyRef.key                 | |
