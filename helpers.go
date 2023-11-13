@@ -6,6 +6,7 @@ import (
 	"io"
 	"encoding/json"
 	"os"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -35,7 +36,8 @@ func isIgnoredNamespace(namespace string) bool {
 	}
 	ignoredNamespaces := strings.Split(ignoredNamespacesEnv, ",")
 	for _, ignoredNamespace := range ignoredNamespaces {
-		if ignoredNamespace == namespace {
+		match, _ := regexp.MatchString(ignoredNamespace, namespace)
+		if match {
 			klog.Infof("Ignore: namespace %s is in the ignored namespace list\n", namespace)
 			return true
 		}
@@ -50,7 +52,8 @@ func isIgnoredPod(name string) bool {
 	}
 	ignoredPodNamePrefixes := strings.Split(ignoredPodNamePrefixesEnv, ",")
 	for _, ignoredPodNamePrefix := range ignoredPodNamePrefixes {
-		if strings.HasPrefix(name, ignoredPodNamePrefix) {
+		match, _ := regexp.MatchString(ignoredPodNamePrefix, name)
+		if match {
 			klog.Infof("Ignore: pod %s has ignored name prefix: %s\n", name, ignoredPodNamePrefix)
 			return true
 		}
@@ -105,7 +108,8 @@ func isWatchedNamespace(namespace string) bool {
 	}
 	watchedNamespaces := strings.Split(watchedNamespacesEnv, ",")
 	for _, watchedNamespace := range watchedNamespaces {
-		if watchedNamespace == namespace {
+		match, _ := regexp.MatchString(watchedNamespace, namespace)
+		if match {
 			return true
 		}
 	}
@@ -122,7 +126,8 @@ func isWatchedPod(name string) bool {
 	}
 	watchedPodNamePrefixes := strings.Split(watchedPodNamePrefixesEnv, ",")
 	for _, watchedPodNamePrefix := range watchedPodNamePrefixes {
-		if strings.HasPrefix(name, watchedPodNamePrefix) {
+		match, _ := regexp.MatchString(watchedPodNamePrefix, name)
+		if match {
 			return true
 		}
 	}
