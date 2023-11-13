@@ -18,6 +18,10 @@ ignoredNamespaces: ""
 # A comma-separated list of pod name prefixes to ignore
 ignoredPodNamePrefixes: ""
 
+# A json map with specific errors to ignore from specific pods
+# {"podName": ["error 1", "error 2"]}
+ignoredErrorsForPodNamePrefixes: ""
+
 # A comma-separated list of namespaces to watch, default is all ("")
 watchedNamespaces: ""
 # A comma-separated list of pod name prefixes to watch, default is all ("").

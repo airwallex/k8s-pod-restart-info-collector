@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"encoding/json"
 	"os"
 	"sort"
 	"strconv"
@@ -55,6 +56,46 @@ func isIgnoredPod(name string) bool {
 		}
 	}
 	return false
+}
+
+func isIgnoredErrorForPod(podName string, errorLog string) bool {
+	ignoredErrorsForPodNamePrefixesEnv := os.Getenv("IGNORED_ERRORS_FOR_POD_NAME_PREFIXES")
+	if ignoredErrorsForPodNamePrefixesEnv == "" {
+		return false
+	}
+
+	podErrorsMap := make(map[string][]interface{})
+	err := json.Unmarshal([]byte(ignoredErrorsForPodNamePrefixesEnv), &podErrorsMap)
+	if err != nil {
+		klog.Infof("Failed to load IGNORED_ERRORS_FOR_POD_NAME_PREFIXES with error: %s", err)
+		return false
+	}
+
+	for key, errors := range podErrorsMap {
+		if strings.HasPrefix(podName, key) {
+			for _, ignoredError := range errors {
+				if strings.Contains(errorLog, ignoredError.(string)) {
+					klog.Infof("Ignore: pod %s has ignored error: %s\n", podName, ignoredError)
+					return true
+				}
+			}
+		}
+	}
+
+	return false
+}
+
+func lastNonEmptyLogLine(logs string) string {
+	logLines := strings.Split(logs, "\n")
+
+	for i := 1; i <= len(logLines); i++ {
+		lastLogLine := logLines[len(logLines)-i]
+		if lastLogLine != "" {
+			return lastLogLine;
+		}
+	}
+
+	return ""
 }
 
 func isWatchedNamespace(namespace string) bool {
