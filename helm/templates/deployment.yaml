@@ -49,7 +49,7 @@ spec:
               value: {{ .Values.watchedPodNamePrefixes | quote}}
             - name: IGNORED_POD_NAME_PREFIXES
               value: {{ .Values.ignoredPodNamePrefixes | quote}}
-            - name: IGNORED_ERROR_FOR_POD_NAME_PREFIXES
+            - name: IGNORED_ERRORS_FOR_POD_NAME_PREFIXES
               value: {{ .Values.ignoredErrorsForPodNamePrefixes | quote}}
             - name: IGNORE_RESTARTS_WITH_EXIT_CODE_ZERO
               value: {{ .Values.ignoreRestartsWithExitCodeZero | quote}}
