@@ -88,19 +88,6 @@ func isIgnoredErrorForPod(podName string, errorLog string) bool {
 	return false
 }
 
-func lastNonEmptyLogLine(logs string) string {
-	logLines := strings.Split(logs, "\n")
-
-	for i := 1; i <= len(logLines); i++ {
-		lastLogLine := logLines[len(logLines)-i]
-		if lastLogLine != "" {
-			return lastLogLine;
-		}
-	}
-
-	return ""
-}
-
 func isWatchedNamespace(namespace string) bool {
 	watchedNamespacesEnv := os.Getenv("WATCHED_NAMESPACES")
 	if watchedNamespacesEnv == "" {

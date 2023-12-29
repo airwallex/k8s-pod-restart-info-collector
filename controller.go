@@ -264,7 +264,7 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 			return err
 		}
 
-		if isIgnoredErrorForPod(pod.Name, lastNonEmptyLogLine(containerLogs)) {
+		if isIgnoredErrorForPod(pod.Name, containerLogs) {
 			continue
 		}
 
