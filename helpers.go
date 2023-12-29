@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"encoding/json"
 	"os"
 	"regexp"
 	"sort"
@@ -57,6 +58,33 @@ func isIgnoredPod(name string) bool {
 			return true
 		}
 	}
+	return false
+}
+
+func isIgnoredErrorForPod(podName string, errorLog string) bool {
+	ignoredErrorsForPodNamePrefixesEnv := os.Getenv("IGNORED_ERRORS_FOR_POD_NAME_PREFIXES")
+	if ignoredErrorsForPodNamePrefixesEnv == "" {
+		return false
+	}
+
+	podErrorsMap := make(map[string][]interface{})
+	err := json.Unmarshal([]byte(ignoredErrorsForPodNamePrefixesEnv), &podErrorsMap)
+	if err != nil {
+		klog.Infof("Failed to load IGNORED_ERRORS_FOR_POD_NAME_PREFIXES with error: %s", err)
+		return false
+	}
+
+	for key, errors := range podErrorsMap {
+		if strings.HasPrefix(podName, key) {
+			for _, ignoredError := range errors {
+				if strings.Contains(errorLog, ignoredError.(string)) {
+					klog.Infof("Ignore: pod %s has ignored error: %s\n", podName, ignoredError)
+					return true
+				}
+			}
+		}
+	}
+
 	return false
 }
 

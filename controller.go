@@ -263,6 +263,11 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 		if err != nil {
 			return err
 		}
+
+		if isIgnoredErrorForPod(pod.Name, containerLogs) {
+			continue
+		}
+
 		if containerLogs == "" {
 			containerLogs = "• No Logs Before Restart\n"
 		} else {
