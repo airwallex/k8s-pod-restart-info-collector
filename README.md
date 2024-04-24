@@ -24,6 +24,7 @@ As shown below, by clicking “Show more”, we can see the Reason, “Pod Statu
 
 ```bash
 export SLACK_WEBHOOK_URL=https://hooks.slack.com/services/xxxxx/xxxxx
+export GOOGLECHAT_WEBHOOK_URL=https://chat.googleapis.com/v1/spaces/xxxxx
 go run .
 ```
 
@@ -84,7 +85,12 @@ helm uninstall k8s-pod-restart-info-collector
 | `ignoreRestartsWithExitCodeZero`    | Whether restart events with an exit code of 0 should be ignored | default: `false`
 | `slackWebhookUrl`                   | Slack webhook URL | required if slackWebhooUrlSecretKeyRef is not present                       |
 | `slackWebhookurlSecretKeyRef.key`   | Slack webhook URL SecretKeyRef.key                 | |
-| `slackWebhookurlSecretKeyRef.name`  | Slack webhook URL SecretKeyRef.name                | |
+| `slackWebhookurlSecretKeyRef.name`  | Slack webhook URL SecretKeyRef.name                | | 
+| `useGooglechat`                     | Whether to use Google Chat for notifications | default: `true`  |
+| `googlechatWebhookUrl`              | Google Chat webhook URL | required if googlechatWebhookUrlSecretKeyRef is not present  |
+| `googlechatWebhookUrlSecretKeyRef.key`   | Google Chat webhook URL SecretKeyRef.key                 | |
+| `googlechatWebhookUrlSecretKeyRef.name`  | Google Chat webhook URL SecretKeyRef.name                | |
+
 
 ## FAQ
 

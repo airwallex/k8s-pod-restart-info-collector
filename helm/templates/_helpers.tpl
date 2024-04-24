@@ -62,9 +62,19 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{/*
-Use existing secret or create one based on slackWebhookUrl
-*/}}
+{{- define "k8s-pod-restart-info-collector.GooglechatWebhookUrlSecret" -}}
+{{- if not .Values.googlechatWebhookUrlSecretKeyRef }}
+  secretKeyRef:
+    key: googlechatWebhookUrl
+    name: {{ include "k8s-pod-restart-info-collector.fullname" . }}
+{{- else }}
+  secretKeyRef:
+    key: {{ .Values.googlechatWebhookUrlSecretKeyRef.key }} 
+    name: {{ .Values.googlechatWebhookUrlSecretKeyRef.name }}
+  optional: false
+{{- end }}
+{{- end }}
+
 {{- define "k8s-pod-restart-info-collector.SlackWebhookUrlSecret" -}}
 {{- if not .Values.slackWebhookUrlSecretKeyRef }}
   secretKeyRef:

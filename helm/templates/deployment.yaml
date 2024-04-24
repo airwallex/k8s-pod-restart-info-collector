@@ -12,9 +12,9 @@ spec:
   template:
     metadata:
       annotations:
-    {{- with .Values.podAnnotations }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+        {{- end }}
       labels:
         {{- include "k8s-pod-restart-info-collector.selectorLabels" . | nindent 8 }}
     spec:
@@ -51,6 +51,11 @@ spec:
               value: {{ .Values.ignoredPodNamePrefixes | quote}}
             - name: IGNORE_RESTARTS_WITH_EXIT_CODE_ZERO
               value: {{ .Values.ignoreRestartsWithExitCodeZero | quote}}
+            - name: USE_GOOGLE_CHAT
+              value: {{ .Values.useGooglechat | quote}}
+            - name: GOOGLECHAT_WEBHOOK_URL
+              valueFrom:
+                {{- include "k8s-pod-restart-info-collector.GooglechatWebhookUrlSecret" . | indent 14 }}
             - name: SLACK_WEBHOOK_URL
               valueFrom:
               {{- include "k8s-pod-restart-info-collector.SlackWebhookUrlSecret" . | indent 14 }}

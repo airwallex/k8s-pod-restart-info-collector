@@ -3,16 +3,22 @@
 # Declare variables to be passed into your templates.
 
 
-# clusterName: "Change-Me"
+clusterName: "minikube"
 # slackWebhookUrl: "https://hooks.slack.com/services/Change-Me"
-#slackWebhookUrlSecretKeyRef:
-#  key: "slackWebhookUrl"
-#  name: "k8s-pod-restart-info-collector"
+# slackWebhookUrlSecretKeyRef:
+#   key: "slackWebhookUrl"
+#   name: "k8s-pod-restart-info-collector"
 slackChannel: "restart-info-nonprod"
 slackUsername: "k8s-pod-restart-info-collector"
 muteSeconds: 600
 ignoreRestartCount: 30
+# googlechatWebhookUrl: "https://chat.googleapis.com/v1/spaces/SPACE_ID/messages?key=KEY&token=TOKEN"
+# googlechatWebhookUrlSecretKeyRef:
+#   key: "googlechatWebhookUrl"
+#   name: "k8s-pod-restart-info-collector"
+useGooglechat: true
 
+  
 # A set of namespaces to be ignored. This should be provided as a comma-separated list or a regular expression.
 ignoredNamespaces: ""
 # A set of pod name prefixes to be ignored. This should be provided as a comma-separated list or a regular expression.
@@ -27,8 +33,8 @@ watchedPodNamePrefixes: ""
 ignoreRestartsWithExitCodeZero: false
 
 image:
-  repository: devopsairwallex/k8s-pod-restart-info-collector
-  tag: "v1.4.0"
+  repository: wushie/k8s-pod-restart-info-collector
+  tag: "v1.5.0"
 
 resources: 
   limits:
