@@ -106,6 +106,9 @@ Please refer to:
 - https://github.com/kubernetes/community/blob/master/contributors/devel/sig-api-machinery/controllers.md
 - https://github.com/kubernetes/client-go/tree/master/examples/workqueue
 
+## Reference blogs
+- [optimize-kubernetes-stability-with-k8s-pod-restart-info-collector](http://medium.com/@vadiraj.puranik/optimize-kubernetes-stability-with-k8s-pod-restart-info-collector-96b9b63ed97d)
+
 ## Copyright and license
 
 Copyright [2022] [Airwallex (Hong Kong) Limited]
