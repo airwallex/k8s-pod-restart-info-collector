@@ -25,6 +25,10 @@ func getPodRestartCount(pod *v1.Pod) int {
 		container := pod.Status.ContainerStatuses[i]
 		restarts += int(container.RestartCount)
 	}
+	for i := range pod.Status.InitContainerStatuses {
+		container := pod.Status.InitContainerStatuses[i]
+		restarts += int(container.RestartCount)
+	}
 	return restarts
 }
 
