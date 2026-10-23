@@ -199,6 +199,35 @@ func (c *Controller) getPodFromIndexer(key string) (*v1.Pod, error) {
 	return pod, nil
 }
 
+type restartedContainer struct {
+	status v1.ContainerStatus
+	spec   v1.Container
+}
+
+func getRestartedContainers(pod *v1.Pod) []restartedContainer {
+	var restarted []restartedContainer
+	appendStatuses := func(statuses []v1.ContainerStatus, specs []v1.Container) {
+		for _, status := range statuses {
+			if status.RestartCount == 0 {
+				continue
+			}
+
+			var spec v1.Container
+			for _, candidate := range specs {
+				if candidate.Name == status.Name {
+					spec = candidate
+					break
+				}
+			}
+			restarted = append(restarted, restartedContainer{status: status, spec: spec})
+		}
+	}
+
+	appendStatuses(pod.Status.ContainerStatuses, pod.Spec.Containers)
+	appendStatuses(pod.Status.InitContainerStatuses, pod.Spec.InitContainers)
+	return restarted
+}
+
 // handlePod collects and sends related info to slack.
 func (c *Controller) handlePod(pod *v1.Pod) error {
 	// Skip if pod in slack.History
@@ -212,11 +241,9 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 		}
 	}
 
-	// check and collect restarted container info
-	for _, status := range pod.Status.ContainerStatuses {
-		if status.RestartCount == 0 {
-			continue
-		}
+	// Check and collect restarted regular and init container info.
+	for _, restarted := range getRestartedContainers(pod) {
+		status := restarted.status
 
 		if shouldIgnoreRestartsWithExitCodeZero(status) {
 			klog.Infof("Ignore: %s restarted with ExitCode 0, restartCount: %d\n", podKey, status.RestartCount)
@@ -237,14 +264,7 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 
 		restartReason := printContainerLastStateReason(status)
 
-		var containerSpec v1.Container
-		for _, container := range pod.Spec.Containers {
-			if status.Name == container.Name {
-				containerSpec = container
-				break
-			}
-		}
-		containerResource, err := getContainerResource(containerSpec)
+		containerResource, err := getContainerResource(restarted.spec)
 		if err != nil {
 			return err
 		}
